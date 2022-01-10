@@ -1,11 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { firestore } from '../../firebaseConfig';
 import Tweet from '../../Components/Tweet/Tweet'
+import { AuthContext } from '../../Context/AuthContext';
+
 
 const Home = () => {
 
     const [tweets, setTweets] = useState({});
     const [tweetFormValue, setTweetFormValue] = useState({ user: '',tweet: ''});
+    const {user, setUser} = useContext(AuthContext);
 
     const handleTweetForm = (e) => {
         setTweetFormValue({ ...tweetFormValue, [e.target.name]: e.target.value });

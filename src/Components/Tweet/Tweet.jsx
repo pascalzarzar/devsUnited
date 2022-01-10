@@ -7,6 +7,7 @@ const Tweet = (props) => {
             <p>{props.message}</p>
             <p>{props.author}</p>
             <button onClick={props.delete}>Eliminar Tweet</button>
+            <button onClick={props.edit}>Editar Tweet</button>
         </div>
     );
 };
