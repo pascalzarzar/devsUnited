@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { firestore } from '../../firebaseConfig';
+import { firestore, logout, auth } from '../../firebaseConfig';
 import Tweet from '../../Components/Tweet/Tweet'
 import { AuthContext } from '../../Context/AuthContext';
 
@@ -7,7 +7,7 @@ import { AuthContext } from '../../Context/AuthContext';
 const Home = () => {
 
     const [tweets, setTweets] = useState({});
-    const [tweetFormValue, setTweetFormValue] = useState({ user: '',tweet: ''});
+    const [tweetFormValue, setTweetFormValue] = useState({ tweet: ''});
     const {user, setUser} = useContext(AuthContext);
 
     const handleTweetForm = (e) => {
@@ -17,9 +17,9 @@ const Home = () => {
     const createTweet = (e) => {
         e.preventDefault();
         firestore.collection('tweets')
-        .add(tweetFormValue)
+        .add({ ...tweetFormValue, uid: user.uid, user: user.displayName })
         .then(() => {
-            setTweetFormValue({ tweet:'', user: '' });
+            setTweetFormValue({ tweet:'' });
         })
         .catch((err) => {
             console.log(err.message);
@@ -44,10 +44,15 @@ const Home = () => {
                     return {
                         user: doc.data().user,
                         message: doc.data().tweet,
-                        id: doc.id
-                    }
-                })
+                        id: doc.id,
+                        uid: doc.data().uid 
+                    };
+                });
                 setTweets(tweets);
+            });
+            auth.onAuthStateChanged((user) => {
+                setUser(user);
+                console.log(user);
             });
             return () => desuscribir();
     },[]);
@@ -55,8 +60,8 @@ const Home = () => {
 
     return(
         <main className="Home">
+            <button onClick={logout}>Log out</button>
             <form onSubmit={createTweet}>
-                <input type="text" name="user" placeholder='user' onChange={handleTweetForm} value={tweetFormValue.user} />
                 <textarea 
                     name="tweet" 
                     cols="30" 

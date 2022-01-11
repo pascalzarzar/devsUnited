@@ -1,12 +1,10 @@
-import React, { useState, useContext} from "react";
+import React, { useState} from "react";
 import { auth } from "../../firebaseConfig";
-import { AuthContext } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
 
     const [formValue, setFormValue] = useState({ email: '', password: '' });
-    const {user, setUser} = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -16,8 +14,7 @@ const Register = () => {
     const createUser = (e) => {
         e.preventDefault();
         auth.createUserWithEmailAndPassword(formValue.email, formValue.password)
-        .then((userCredentials) => {
-            setUser(userCredentials.uid);
+        .then(() => {
             navigate('/');
         })
         .catch((err) => {
