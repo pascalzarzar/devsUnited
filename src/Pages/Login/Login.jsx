@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { auth, googleSignUp } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Context/AuthContext";
 
 const Login = () => {
 
     const [formValue, setFormValue] = useState({ email: '', password: '' });
     const navigate = useNavigate();
+    let setUser = useContext(AuthContext);
 
     const handleFormValue = (e) => {
         setFormValue({ ...formValue, [e.target.name]:e.target.value });
@@ -13,8 +15,11 @@ const Login = () => {
 
     const userLogIn = (e) => {
         e.preventDefault();
-        auth.signInWithEmailAndPassword(formValue.email, formValue.password)
-        .then(() => {
+        let { email, password } = formValue;
+        auth.signInWithEmailAndPassword(email, password)
+        .then((userCredentials) => {
+            let {uid, email} = userCredentials.user;
+            setUser({ uid, email });
             navigate('/');
         })
         .catch((err) => {
@@ -24,7 +29,9 @@ const Login = () => {
 
     const signUpWithGoogle = () => {
         googleSignUp()
-        .then(() => {
+        .then((userCredentials) => {
+            let {uid, email} = userCredentials.user;
+            setUser({ uid, email });
             navigate('/');
         })
         .catch((err) => {

@@ -17,7 +17,7 @@ const Home = () => {
     const createTweet = (e) => {
         e.preventDefault();
         firestore.collection('tweets')
-        .add({ ...tweetFormValue, uid: user.uid, user: user.displayName })
+        .add({ ...tweetFormValue, uid: user.uid || {} , user: user.displayName })
         .then(() => {
             setTweetFormValue({ tweet:'' });
         })
@@ -36,6 +36,11 @@ const Home = () => {
         });
     }
 
+    const userLogout = () => {
+        logout();
+        console.log(user);
+    }
+
 //useEffect hook to get the initial set of tweets
     useEffect(() => {
         const desuscribir = firestore.collection('tweets')
@@ -52,7 +57,6 @@ const Home = () => {
             });
             auth.onAuthStateChanged((user) => {
                 setUser(user);
-                console.log(user);
             });
             return () => desuscribir();
     },[]);
