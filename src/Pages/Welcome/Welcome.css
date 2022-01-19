@@ -6,3 +6,9 @@
 .radio_input {
     display:none;
 }
+
+.color1 {
+    background-color: #F50D5A;
+    width: 2em;
+    height: 2em;
+}

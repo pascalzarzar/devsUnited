@@ -1,0 +1,9 @@
+.colorInput {
+    width: 2rem;
+    height: 2rem;
+}
+
+.selected {
+    border: 4px solid white;
+}
+

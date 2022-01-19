@@ -14,6 +14,8 @@ const Home = () => {
         setTweetFormValue({ ...tweetFormValue, [e.target.name]: e.target.value });
     };
 
+    console.log(user);
+
     const createTweet = (e) => {
         e.preventDefault();
         firestore.collection('tweets')
