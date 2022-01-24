@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { auth, googleSignUp } from "../../firebaseConfig";
+import { auth, googleSignUp, firestore } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 
@@ -7,7 +7,7 @@ const Login = () => {
 
     const [formValue, setFormValue] = useState({ email: '', password: '' });
     const navigate = useNavigate();
-    let setUser = useContext(AuthContext);
+    let { setUser } = useContext(AuthContext);
 
     const handleFormValue = (e) => {
         setFormValue({ ...formValue, [e.target.name]:e.target.value });
@@ -18,9 +18,16 @@ const Login = () => {
         let { email, password } = formValue;
         auth.signInWithEmailAndPassword(email, password)
         .then((userCredentials) => {
-            let {uid, email} = userCredentials.user;
-            setUser({ uid, email });
-            navigate('/');
+            let { uid } = userCredentials.user;
+            firestore.collection('users').where('uid', '==', uid)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    setUser({ ...data });
+                    navigate('/');
+                });
+            });
         })
         .catch((err) => {
             console.log(err.message);
@@ -30,9 +37,24 @@ const Login = () => {
     const signUpWithGoogle = () => {
         googleSignUp()
         .then((userCredentials) => {
-            let {uid, email} = userCredentials.user;
-            setUser({ uid, email });
-            navigate('/');
+            let { uid, email } = userCredentials.user;
+            firestore.collection('users').where('uid', '==', uid)
+            .get()
+            .then((querySnapshot) => {
+                if(querySnapshot.docs.length === 0){
+                    firestore.collection('users').add({ uid, email })
+                    .then((data) => {
+                        setUser({ id: data.id, uid, email})
+                        navigate('/register/welcome');
+                    })
+                } else {
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        setUser({ ...data });
+                        navigate('/');
+                    })
+                }
+            })
         })
         .catch((err) => {
             console.log(err.message);
