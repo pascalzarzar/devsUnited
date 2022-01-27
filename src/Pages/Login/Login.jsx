@@ -42,6 +42,7 @@ const Login = () => {
             .get()
             .then((querySnapshot) => {
                 if(querySnapshot.docs.length === 0){
+                    console.log('new user');
                     firestore.collection('users').add({ uid, email })
                     .then((data) => {
                         setUser({ id: data.id, uid, email})
@@ -49,8 +50,9 @@ const Login = () => {
                     })
                 } else {
                     querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        setUser({ ...data });
+                        console.log('existing');
+                        const {id, uid, email, username, bgColor} = doc.data();
+                        setUser({ id, uid, email, username, bgColor });
                         navigate('/');
                     })
                 }

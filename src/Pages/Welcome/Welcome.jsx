@@ -19,10 +19,13 @@ const Welcome = () => {
     const createUserSettings = (e) => {
         e.preventDefault();
         const { username, bgColor } = formValue;
-        firestore.collection('users').doc(user.id).set({...user, username, bgColor})
+        firestore.collection('users').doc(user.id).update({ ...user, username, bgColor })
         .then(() => {
-            setUser({ ...user, username, bgColor });
-            navigate('/');
+            firestore.collection('users').doc(user.id).get()
+            .then((doc) => {
+                setUser({ ...doc.data() });
+                navigate('/');
+            })
         })
         .catch((err) => {
             console.log(err.message);

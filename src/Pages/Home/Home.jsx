@@ -15,11 +15,12 @@ const Home = () => {
     };
 
     console.log(user);
-
+    
     const createTweet = (e) => {
         e.preventDefault();
+        const {username, bgColor, uid } = user;
         firestore.collection('tweets')
-        .add({ ...tweetFormValue, uid: user.uid || {} , user: user.displayName })
+        .add({ ...tweetFormValue, uid: uid, username, bgColor, likes: 0  })
         .then(() => {
             setTweetFormValue({ tweet:'' });
         })
@@ -30,17 +31,9 @@ const Home = () => {
 
     const deleteTweet = (id) => {
         firestore.collection('tweets').doc(id).delete()
-        .then(() => {
-            console.log('Document successfully deleted');
-        })
         .catch((err) => {
             console.log(err.message);
         });
-    }
-
-    const userLogout = () => {
-        logout();
-        console.log(user);
     }
 
 //useEffect hook to get the initial set of tweets
@@ -49,19 +42,32 @@ const Home = () => {
             .onSnapshot((snapshot) => {
                 const tweets = snapshot.docs.map((doc) => {
                     return {
-                        user: doc.data().user,
-                        message: doc.data().tweet,
-                        id: doc.id,
-                        uid: doc.data().uid 
+                        uid: doc.data().uid,
+                        username: doc.data().username,
+                        message: doc.data().message,
+                        bgColor: doc.data().bgColor,
+                        likes: doc.data().likes,
+                        id: doc.id
                     };
                 });
                 setTweets(tweets);
             });
             auth.onAuthStateChanged((user) => {
-                setUser(user);
+                if(user !== null){
+                    firestore.collection('users').where('uid', '==', user.uid)
+                    .get()
+                    .then((querySnapshot) => {
+                        setUser(querySnapshot.docs[0].data());
+                    })
+                    .catch((err) => {
+                        console.log(err.message);
+                    })
+                } else {
+                    setUser(user);
+                }
             });
             return () => desuscribir();
-    },[]);
+    },[setUser]);
 
 
     return(
@@ -78,8 +84,21 @@ const Home = () => {
                     </textarea>
                 <input type="submit" />
             </form>
+            {console.log(tweets)}
             {tweets.length >= 0
-            ? tweets.map((tweet) => <Tweet key={tweet.id} message={tweet.message} author={tweet.user} delete={() => deleteTweet(tweet.id)}/> )
+            ? tweets.map((tweet) => {
+                return(
+                    <Tweet 
+                    key={tweet.id}
+                    uid={tweet.uid}  
+                    message={tweet.message} 
+                    username={tweet.username}
+                    likes={tweet.likes}
+                    bgColor={tweet.bgColor} 
+                    delete={() => deleteTweet(tweet.id)}
+                    /> 
+                ) 
+                })
             : <p>Loading here</p>
             }
         </main>
