@@ -43,7 +43,7 @@ const Login = () => {
             .then((querySnapshot) => {
                 if(querySnapshot.docs.length === 0){
                     console.log('new user');
-                    firestore.collection('users').add({ uid, email })
+                    firestore.collection('users').add({ uid, email, favorites: {} })
                     .then((data) => {
                         setUser({ id: data.id, uid, email})
                         navigate('/register/welcome');

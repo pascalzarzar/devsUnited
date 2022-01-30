@@ -7,7 +7,7 @@ import { AuthContext } from '../../Context/AuthContext';
 const Home = () => {
 
     const [tweets, setTweets] = useState({});
-    const [tweetFormValue, setTweetFormValue] = useState({ tweet: ''});
+    const [tweetFormValue, setTweetFormValue] = useState({ message: ''});
     const {user, setUser} = useContext(AuthContext);
 
     const handleTweetForm = (e) => {
@@ -22,7 +22,7 @@ const Home = () => {
         firestore.collection('tweets')
         .add({ ...tweetFormValue, uid: uid, username, bgColor, likes: 0  })
         .then(() => {
-            setTweetFormValue({ tweet:'' });
+            setTweetFormValue({ message:'' })
         })
         .catch((err) => {
             console.log(err.message);
@@ -35,6 +35,8 @@ const Home = () => {
             console.log(err.message);
         });
     }
+
+
 
 //useEffect hook to get the initial set of tweets
     useEffect(() => {
@@ -75,12 +77,12 @@ const Home = () => {
             <button onClick={logout}>Log out</button>
             <form onSubmit={createTweet}>
                 <textarea 
-                    name="tweet" 
+                    name="message" 
                     cols="30" 
                     rows="10"  
                     placeholder='Whats Happening?' 
                     onChange={handleTweetForm}
-                    value={tweetFormValue.tweet}>    
+                    value={tweetFormValue.message}>    
                     </textarea>
                 <input type="submit" />
             </form>
@@ -90,11 +92,7 @@ const Home = () => {
                 return(
                     <Tweet 
                     key={tweet.id}
-                    uid={tweet.uid}  
-                    message={tweet.message} 
-                    username={tweet.username}
-                    likes={tweet.likes}
-                    bgColor={tweet.bgColor} 
+                    data={tweet}
                     delete={() => deleteTweet(tweet.id)}
                     /> 
                 ) 
