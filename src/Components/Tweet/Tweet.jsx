@@ -10,33 +10,43 @@ const Tweet = (props) => {
     const {id, uid, message, username, likes} = props.data;
 
     const addToFavorites =  () => {
-        firestore.collection('tweets').doc(id).update({
-            likes: firebase.firestore.FieldValue.arrayUnion(user.uid)
-        })
-        firestore.collection('users').doc(user.id).update({
-            favorites: firebase.firestore.FieldValue.arrayUnion(props.data)
-        })
-        .catch((err) => {
-            console.log(err.message);
-        })
+        if(user !== null) {
+            firestore.collection('tweets').doc(id).update({
+                likes: firebase.firestore.FieldValue.arrayUnion(user.uid)
+            })
+            firestore.collection('users').doc(user.id).update({
+                favorites: firebase.firestore.FieldValue.arrayUnion(props.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+            })
+        }
     }
 
     const eraseFromFavorites = () => {
-        firestore.collection('tweets').doc(id).update({
-            likes: firebase.firestore.FieldValue.arrayRemove(user.uid)
-        })
-        firestore.collection('users').doc(user.id).update({
-            favorites: firebase.firestore.FieldValue.arrayRemove(props.data)
-        })
-        .catch((err) => {
-            console.log(err.message);
-        })
+        if(user !== null) {
+            firestore.collection('tweets').doc(id).update({
+                likes: firebase.firestore.FieldValue.arrayRemove(user.uid)
+            })
+            firestore.collection('users').doc(user.id).update({
+                favorites: firebase.firestore.FieldValue.arrayRemove(props.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+            })
+        }
     }
 
     const firstRendering = useRef(true);
 
     useEffect(()=> {
-        if(firstRendering.current){
+        if(firstRendering.current && user != null){
+            const findFavorite = likes.findIndex((id) => {
+                return id === user.uid;
+            });
+            if(findFavorite >= 0) {
+                setisFavorite(true);
+            }
             firstRendering.current = false;
         } else {
             if(isFavorite){
