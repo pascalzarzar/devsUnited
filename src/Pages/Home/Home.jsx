@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import { firestore, logout, auth } from '../../firebaseConfig';
 import Tweet from '../../Components/Tweet/Tweet'
 import { AuthContext } from '../../Context/AuthContext';
+import { Link } from 'react-router-dom';
 
 
 const Home = () => {
@@ -24,13 +25,6 @@ const Home = () => {
         .then(() => {
             setTweetFormValue({ message:'' })
         })
-        .catch((err) => {
-            console.log(err.message);
-        });
-    }
-
-    const deleteTweet = (id) => {
-        firestore.collection('tweets').doc(id).delete()
         .catch((err) => {
             console.log(err.message);
         });
@@ -75,6 +69,9 @@ const Home = () => {
     return(
         <main className="Home">
             <button onClick={logout}>Log out</button>
+            <button>
+                <Link to='/profile'>Profile</Link>
+            </button>
             <form onSubmit={createTweet}>
                 <textarea 
                     name="message" 
@@ -93,7 +90,6 @@ const Home = () => {
                     <Tweet 
                     key={tweet.id}
                     data={tweet}
-                    delete={() => deleteTweet(tweet.id)}
                     /> 
                 ) 
                 })

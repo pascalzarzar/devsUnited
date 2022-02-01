@@ -6,7 +6,6 @@ const Tweet = (props) => {
 
     const { user } = useContext(AuthContext);
     const [isFavorite, setisFavorite] = useState(false);
-
     const {id, uid, message, username, likes} = props.data;
 
     const addToFavorites =  () => {
@@ -37,6 +36,13 @@ const Tweet = (props) => {
         }
     }
 
+    const deleteTweet = (id) => {
+        firestore.collection('tweets').doc(id).delete()
+        .catch((err) => {
+            console.log(err.message);
+        });
+    }
+
     const firstRendering = useRef(true);
 
     useEffect(()=> {
@@ -61,7 +67,7 @@ const Tweet = (props) => {
         <div className="Tweet">
             <p>{message}</p>
             <p>{username}</p>
-            {user !== null && user.uid === uid  && <button onClick={props.delete}>Eliminar Tweet</button>}
+            {user !== null && user.uid === uid  && <button onClick={() => deleteTweet(id)}>Eliminar Tweet</button>}
             {user !== null && <input type="checkbox" name="like" id="like" onChange={() => setisFavorite(!isFavorite)} checked={isFavorite} /> }
             <label id="like">{likes.length || 0}</label>
         </div>
