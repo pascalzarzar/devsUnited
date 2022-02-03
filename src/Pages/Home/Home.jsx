@@ -3,13 +3,13 @@ import { firestore, logout, auth } from '../../firebaseConfig';
 import Tweet from '../../Components/Tweet/Tweet'
 import { AuthContext } from '../../Context/AuthContext';
 import { Link } from 'react-router-dom';
+import FavTweets from '../../Components/FavTweets/FavTweets';
 
 
 const Home = () => {
 
-    const [tweets, setTweets] = useState({});
     const [tweetFormValue, setTweetFormValue] = useState({ message: ''});
-    const {user, setUser} = useContext(AuthContext);
+    const {user, tweets} = useContext(AuthContext);
 
     const handleTweetForm = (e) => {
         setTweetFormValue({ ...tweetFormValue, [e.target.name]: e.target.value });
@@ -21,7 +21,7 @@ const Home = () => {
         e.preventDefault();
         const {username, bgColor, uid } = user;
         firestore.collection('tweets')
-        .add({ ...tweetFormValue, uid: uid, username, bgColor, likes: 0  })
+        .add({ ...tweetFormValue, uid: uid, username, bgColor, likes: {}  })
         .then(() => {
             setTweetFormValue({ message:'' })
         })
@@ -29,41 +29,6 @@ const Home = () => {
             console.log(err.message);
         });
     }
-
-
-
-//useEffect hook to get the initial set of tweets
-    useEffect(() => {
-        const desuscribir = firestore.collection('tweets')
-            .onSnapshot((snapshot) => {
-                const tweets = snapshot.docs.map((doc) => {
-                    return {
-                        uid: doc.data().uid,
-                        username: doc.data().username,
-                        message: doc.data().message,
-                        bgColor: doc.data().bgColor,
-                        likes: doc.data().likes,
-                        id: doc.id
-                    };
-                });
-                setTweets(tweets);
-            });
-            auth.onAuthStateChanged((user) => {
-                if(user !== null){
-                    firestore.collection('users').where('uid', '==', user.uid)
-                    .get()
-                    .then((querySnapshot) => {
-                        setUser(querySnapshot.docs[0].data());
-                    })
-                    .catch((err) => {
-                        console.log(err.message);
-                    })
-                } else {
-                    setUser(user);
-                }
-            });
-            return () => desuscribir();
-    },[setUser]);
 
 
     return(
@@ -83,7 +48,6 @@ const Home = () => {
                     </textarea>
                 <input type="submit" />
             </form>
-            {console.log(tweets)}
             {tweets.length >= 0
             ? tweets.map((tweet) => {
                 return(
@@ -95,6 +59,7 @@ const Home = () => {
                 })
             : <p>Loading here</p>
             }
+            <FavTweets/>
         </main>
     );
 }
