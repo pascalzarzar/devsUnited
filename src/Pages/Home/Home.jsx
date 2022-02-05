@@ -1,27 +1,25 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { firestore, logout, auth } from '../../firebaseConfig';
+import React, {useState, useContext} from 'react';
+import { firestore } from '../../firebaseConfig';
 import Tweet from '../../Components/Tweet/Tweet'
 import { AuthContext } from '../../Context/AuthContext';
 import { Link } from 'react-router-dom';
-import FavTweets from '../../Components/FavTweets/FavTweets';
+import baseProfile from '../../assets/svg/profile.svg';
 
 
 const Home = () => {
 
     const [tweetFormValue, setTweetFormValue] = useState({ message: ''});
-    const {user, tweets} = useContext(AuthContext);
+    const {user, tweets, userLogOut} = useContext(AuthContext);
 
     const handleTweetForm = (e) => {
         setTweetFormValue({ ...tweetFormValue, [e.target.name]: e.target.value });
     };
-
-    console.log(user);
     
     const createTweet = (e) => {
         e.preventDefault();
         const {username, bgColor, uid } = user;
         firestore.collection('tweets')
-        .add({ ...tweetFormValue, uid: uid, username, bgColor, likes: {}  })
+        .add({ ...tweetFormValue, uid: uid, username, bgColor, likes: []  })
         .then(() => {
             setTweetFormValue({ message:'' })
         })
@@ -30,13 +28,13 @@ const Home = () => {
         });
     }
 
-
     return(
         <main className="Home">
-            <button onClick={logout}>Log out</button>
+            <button onClick={userLogOut}>Log out</button>
             <button>
                 <Link to='/profile'>Profile</Link>
             </button>
+            <img src={user.photoURL ? user.photoURL : baseProfile} alt="profile" />
             <form onSubmit={createTweet}>
                 <textarea 
                     name="message" 
@@ -59,7 +57,6 @@ const Home = () => {
                 })
             : <p>Loading here</p>
             }
-            <FavTweets/>
         </main>
     );
 }

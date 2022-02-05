@@ -1,0 +1,100 @@
+.Login {
+    width: 100vw;
+    background-color: #2E132C;
+}
+
+.Login-Container {
+    display: flex;
+    flex-direction:column;
+    margin: auto;
+    overflow:auto;
+    
+}
+
+.Login-Logo {
+    height: 50vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 526px;
+    margin: auto;
+}
+
+.Login-Logo img {
+    width: 80%;
+}
+
+.Login-Inputs {
+    width: 80%;
+    margin: auto;
+    max-width: 425px;
+}
+
+.Login-Inputs-title {
+    font-family: 'Press Start 2P', cursive;
+    color:white;
+    text-align: left;
+}
+
+.Login-Inputs-p {
+    color: white;
+    font-family:'Fira Code', monospace;
+    text-align: left;
+}
+
+.Login-Form {
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.Login-Input {
+    width: 100%;
+    height: 53px;
+    margin-bottom: 1em;
+    border: none;
+    background-color: #150714;
+}
+
+.Login-Input::placeholder {
+    padding-left: 1em;
+    color: #914D8B;
+    font-family:'Fira Code', monospace;
+}
+
+.Login-Button {
+    width: 100%;
+    height: 53px;
+    font-family: 'Press Start 2P', cursive;
+    border: none;
+    color: white;
+    background-color: #00DA76;
+}
+
+.Login-Inputs-google {
+    width: 100%;
+}
+
+.Login-Inputs-footer{
+    font-family:'Fira Code', monospace; 
+    font-size: 14px;
+    color: #60265B;
+    margin-bottom: 20px;
+}
+
+.Login-Inputs-footer span {
+    color:#F50D5A;
+}
+
+@media only screen and (min-width: 992px) {
+
+    .Login-Container {
+        flex-direction: row;
+        height: 100vh;
+        max-width: 1200px;
+    }
+}

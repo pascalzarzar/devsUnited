@@ -40,9 +40,9 @@ const Tweet = (props) => {
 
 
     const showLike = (likes) => {
-        if(likes && user.uid) {
-            const isLikedByUser = likes.findIndex((like) => like === user.uid);
-            if (isLikedByUser > 0){
+        if(likes.length >= 0 && user.uid) {
+            let isLikedByUser = likes.findIndex((like) => like === user.uid);
+            if (isLikedByUser >= 0){
                 return(
                     <div>
                         <img src={likeSvg} alt="hearth svg for likes" onClick={() => eraseFromFavorites()} />

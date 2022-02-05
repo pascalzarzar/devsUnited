@@ -19,7 +19,7 @@ const Register = () => {
         auth.createUserWithEmailAndPassword(email,password)
         .then((userCredentials) => {
             let {uid, email} = userCredentials.user;
-            firestore.collection('users').add({ uid: uid, email: email, favorites: {} })
+            firestore.collection('users').add({ uid: uid, email: email})
             .then((data) => {
                 setUser({ id: data.id,uid, email });
                 navigate('/register/welcome');

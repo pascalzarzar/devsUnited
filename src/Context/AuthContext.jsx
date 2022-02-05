@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { firestore, auth } from "../firebaseConfig";
+import { logout } from "../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -7,6 +9,7 @@ const AuthProvider = ({children}) => {
     
     const [user, setUser] = useState({});
     const [tweets, setTweets] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         const desuscribir = firestore.collection('tweets')
@@ -40,8 +43,14 @@ const AuthProvider = ({children}) => {
             return () => desuscribir();
     },[setUser]);
 
+    const userLogOut = () => {
+        navigate('/login');
+        logout();
+    }
+
+
     return(
-        <AuthContext.Provider value={{ user, setUser, tweets, setTweets }}>
+        <AuthContext.Provider value={{ user, setUser, tweets, setTweets, userLogOut }}>
             {children}
         </AuthContext.Provider>
     ); 
