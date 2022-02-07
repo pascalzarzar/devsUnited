@@ -20,7 +20,8 @@ const AuthProvider = ({children}) => {
                         username: doc.data().username,
                         message: doc.data().message,
                         bgColor: doc.data().bgColor,
-                        likes: doc.data().likes || {},
+                        likes: doc.data().likes,
+                        photoURL: doc.data().photoURL,
                         id: doc.id
                     };
                 });

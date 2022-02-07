@@ -1,13 +1,17 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext } from "react";
 import firebase, { firestore } from "../../firebaseConfig";
 import { AuthContext } from "../../Context/AuthContext";
-import likeSvg from '../../assets/svg/like.svg'
-import dislikeSvg from '../../assets/svg/dislike.svg'
+import likeSvg from '../../assets/svg/like.svg';
+import dislikeSvg from '../../assets/svg/dislike.svg';
+import baseProfile from '../../assets/svg/profile.svg';
+import './Tweet.css';
+
+
 
 const Tweet = (props) => {
 
     const { user } = useContext(AuthContext);
-    const {id, uid, message, username, likes} = props.data;
+    const {id, uid, message, username, likes, photoURL, bgColor } = props.data;
 
     const addToFavorites =  () => {
         if(user !== null) {
@@ -45,14 +49,14 @@ const Tweet = (props) => {
             if (isLikedByUser >= 0){
                 return(
                     <div>
-                        <img src={likeSvg} alt="hearth svg for likes" onClick={() => eraseFromFavorites()} />
+                        <img className="Tweet-Content-Like-Icon" src={likeSvg} alt="hearth svg for likes" onClick={() => eraseFromFavorites()} />
                     </div>
                 )
             }
             else {
                 return(
                     <div>
-                        <img src={dislikeSvg} alt="heath svg for idle state on likes" onClick={() => addToFavorites()} />
+                        <img className="Tweet-Content-Like-Icon" src={dislikeSvg} alt="heath svg for idle state on likes" onClick={() => addToFavorites()} />
                     </div>
                 )
             } 
@@ -61,11 +65,20 @@ const Tweet = (props) => {
 
     return(
         <div className="Tweet">
-            <p>{message}</p>
-            <p>{username}</p>
-            {user !== null && user.uid === uid  && <button onClick={() => deleteTweet(id)}>Eliminar Tweet</button>}
-            {user !== null && showLike(likes)}
-            <label id="like">{likes.length || 0}</label>
+            <div className="Tweet-Img">
+                <img src={photoURL ? photoURL : baseProfile} alt="author" />
+            </div>
+            <div className="Tweet-Content">
+                <div className="Tweet-Content-Header">
+                    <h5 className='Tweet-Content-Username' style={{backgroundColor: bgColor}}>{username}</h5>
+                    {user !== null && user.uid === uid  && <i className="far fa-trash-alt Tweet-Content-Delete" onClick={() => deleteTweet(id)}></i>}
+                </div>
+                <p className='Tweet-Content-Message'>{message}</p>
+                <div className="Tweet-Content-Like">
+                    {user !== null && showLike(likes)}
+                    <label id="like" className="Tweet-Content-Like-Count">{likes.length}</label>
+                </div>
+            </div>
         </div>
     );
 };

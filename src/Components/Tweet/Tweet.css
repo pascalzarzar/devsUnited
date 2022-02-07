@@ -1,0 +1,62 @@
+.Tweet {
+    display: flex;
+    justify-content: center;
+    border-bottom: 2px solid #60265B;
+    max-width: 605px;
+    padding: 1em;
+}
+
+.Tweet-Img {
+    margin-right: 1em;
+}
+
+.Tweet-Img img {
+    border-radius: 50%;
+    width: 48px;
+}
+
+.Tweet-Content {
+    display: flex;
+    flex-direction: column;
+    min-width: 275px;
+    max-width: 324px;
+}
+
+.Tweet-Content-Header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.Tweet-Content-Username {
+    padding: 0.5em;
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
+    color:#2E132C;
+}
+
+.Tweet-Content-Delete {
+    color: white;
+}
+
+.Tweet-Content-Message {
+    font-family:'Fira Code', monospace;
+    color: white;
+    text-align: start;
+}
+
+.Tweet-Content-Like {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.Tweet-Content-Like-Icon {
+    width: 18px;
+    margin-right: 0.5em;
+}
+
+.Tweet-Content-Like-Count {
+    font-family:'Fira Code', monospace;
+    color: white;
+}
