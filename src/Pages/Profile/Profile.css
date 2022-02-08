@@ -1,0 +1,46 @@
+.Profile {
+    height: 100vh;
+}
+
+.Profile-Info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #150714;
+    border-bottom: 2px solid #60265B;
+}
+
+.Profile-User-Img {
+    border-radius: 50%;
+    width: 134px;
+    border-width: 4px;
+    border-style: solid;
+    margin-top: 2em;
+}
+
+.Profile-User-Username {
+    color:#2E132C;
+    font-family: 'Press Start 2P', cursive;
+    padding: 0.3em;
+    margin-bottom: 2em;
+}
+
+.Profile-Tweets {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #2E132C;
+    height: 100%;
+}
+
+.NavBar-BackIcon {
+    display: flex;
+}
+
+.NavBar-BackIcon h3 {
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    margin-left: 1em;
+}

@@ -32,7 +32,7 @@ const Home = () => {
 
     return(
         <main className="Home">
-            <NavBar/>
+            <NavBar home={true}/>
             <div className='Home-Form'>
                 <div className='Home-Form-ProfileImg'>
                     <img src={user.photoURL ? user.photoURL : baseProfile} alt="profile" />
