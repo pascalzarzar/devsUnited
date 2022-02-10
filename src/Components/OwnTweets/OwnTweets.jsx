@@ -8,7 +8,7 @@ const OwnTweets = () => {
 
     return(
         <div className="Tweet-List">
-            {tweets.map((tweet) => {
+            {tweets.length > 0 && tweets.map((tweet) => {
                 if(tweet.uid === user.uid){
                     return(
                         <Tweet key={tweet.id} data={tweet}/>

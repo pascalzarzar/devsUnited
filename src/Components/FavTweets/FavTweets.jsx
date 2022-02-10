@@ -8,16 +8,16 @@ const FavTweets = () => {
 
     return(
         <div className="Tweet-List">
-            { tweets.map((tweet) => {
+            {tweets.length > 0 && tweets.map((tweet) => {
                 const isFav = tweet.likes.findIndex((like) => user.uid === like);
-                    if(isFav >= 0) {
-                        return (
-                            <Tweet 
-                            key={tweet.id}
-                            data={tweet}
-                            /> 
-                        )
-                    }
+                if(isFav >= 0) {
+                    return (
+                        <Tweet 
+                        key={tweet.id}
+                        data={tweet}
+                        /> 
+                    )
+                }
                 })
             }
         </div>

@@ -2,15 +2,17 @@ import React, {useState, useContext} from 'react';
 import { firestore } from '../../firebaseConfig';
 import Tweet from '../../Components/Tweet/Tweet'
 import { AuthContext } from '../../Context/AuthContext';
-import { Link } from 'react-router-dom';
 import baseProfile from '../../assets/svg/profile.svg';
 import NavBar from '../../Components/NavBar/NavBar';
+import { Navigate } from 'react-router-dom';
 import './Home.css'
 
 
 const Home = () => {
 
+
     const [tweetFormValue, setTweetFormValue] = useState({ message: ''});
+    const [isLoading, setIsLoading] = useState(false);
     const {user, tweets} = useContext(AuthContext);
 
     const handleTweetForm = (e) => {
@@ -19,16 +21,22 @@ const Home = () => {
     
     const createTweet = (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const {username, bgColor, uid, photoURL } = user;
         firestore.collection('tweets')
         .add({ ...tweetFormValue, uid: uid, username, bgColor, likes: [], photoURL })
         .then(() => {
+            setIsLoading(false);
             setTweetFormValue({ message:'' })
         })
         .catch((err) => {
             console.log(err.message);
         });
     }
+
+
+    if (user === null){ return <Navigate to='/'/> }
+    
 
     return(
         <main className="Home">
@@ -51,6 +59,12 @@ const Home = () => {
                 </form>
             </div>
             <div className='Home-Tweets'>
+            {isLoading && <div className="lds-ring">
+                        <div></div>
+                        <div></div> 
+                        <div></div>
+                        <div></div>
+                    </div>}
                 {tweets.length >= 0
                 ? tweets.map((tweet) => {
                     return(
@@ -60,7 +74,12 @@ const Home = () => {
                         /> 
                     ) 
                     })
-                : <p>Loading here</p>
+                :   <div className="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 }
             </div>
         </main>

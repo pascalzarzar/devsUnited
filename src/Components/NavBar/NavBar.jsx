@@ -1,4 +1,4 @@
-import react, {useContext} from "react";
+import {useContext} from "react";
 import { AuthContext } from "../../Context/AuthContext";
 import baseProfile from '../../assets/svg/profile.svg';
 import logoTitle from '../../assets/svg/logo-title.svg';
@@ -29,7 +29,7 @@ const NavBar = (props) => {
                     </div>
                 </div>
             : <div className="NavBar-Container">
-                <Link to='/'>
+                <Link to='/Home'>
                     <div className='NavBar-BackIcon'>
                         <img src={back} alt="back icon" />
                         <h3>{user.username}</h3>

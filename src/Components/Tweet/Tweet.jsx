@@ -4,6 +4,8 @@ import { AuthContext } from "../../Context/AuthContext";
 import likeSvg from '../../assets/svg/like.svg';
 import dislikeSvg from '../../assets/svg/dislike.svg';
 import baseProfile from '../../assets/svg/profile.svg';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import './Tweet.css';
 
 
@@ -36,10 +38,26 @@ const Tweet = (props) => {
     }
 
     const deleteTweet = (id) => {
-        firestore.collection('tweets').doc(id).delete()
-        .catch((err) => {
-            console.log(err.message);
-        });
+        confirmAlert({
+            title: 'Confirm to delete',
+            message: 'Are you sure you want to delete this tweet?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        firestore.collection('tweets')
+                        .doc(id)
+                        .delete()
+                        .catch((err) => {
+                            console.log(err.message);
+                        });
+                    }
+                },
+                {
+                    label: 'No',
+                }
+            ]
+            });
     }
 
 

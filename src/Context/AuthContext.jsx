@@ -45,13 +45,13 @@ const AuthProvider = ({children}) => {
     },[setUser]);
 
     const userLogOut = () => {
-        navigate('/login');
+        navigate('/');
         logout();
     }
 
 
     return(
-        <AuthContext.Provider value={{ user, setUser, tweets, setTweets, userLogOut }}>
+        <AuthContext.Provider value={{ user, setUser, tweets, setTweets, userLogOut, navigate }}>
             {children}
         </AuthContext.Provider>
     ); 

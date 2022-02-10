@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from '../../Context/AuthContext';
 import FavTweets from "../../Components/FavTweets/FavTweets";
 import OwnTweets from "../../Components/OwnTweets/OwnTweets";
@@ -6,6 +6,7 @@ import baseProfile from '../../assets/svg/profile.svg'
 import favoritesTab from '../../assets/svg/favorites.svg'
 import postsTab from '../../assets/svg/posts.svg' 
 import NavBar from "../../Components/NavBar/NavBar";
+import { Navigate } from "react-router-dom";
 import './Profile.css'
 
 const Profile = () => {
@@ -18,6 +19,8 @@ const Profile = () => {
 
     const { user } = useContext(AuthContext);
 
+
+    if (user === null){ return <Navigate to='/'/> }
 
     return(
         <div className='Profile'>

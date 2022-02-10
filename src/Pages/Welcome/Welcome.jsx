@@ -1,17 +1,17 @@
 import React, { useState, useContext } from "react";
 import { firestore } from "../../firebaseConfig";
 import logo from '../../logo.svg';
-import ColorInput from './ColorInput/ColorInput'
+import ColorInput from '../../Components/ColorInput/ColorInput';
 import { AuthContext } from "../../Context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import './Welcome.css';
 
 
 const Welcome = () => {
 
     const [formValue, setFormValue] = useState({username: '', bgColor: ''});
-    const { user, setUser } = useContext(AuthContext);
-    const navigate = useNavigate();
+
+    const { user, setUser, navigate } = useContext(AuthContext);
+
     const handleChange = (e) => {
         setFormValue({...formValue, [e.target.name]: e.target.value });
     }
@@ -24,7 +24,7 @@ const Welcome = () => {
             firestore.collection('users').doc(user.id).get()
             .then((doc) => {
                 setUser({ ...doc.data() });
-                navigate('/');
+                navigate('/Home');
             })
         })
         .catch((err) => {
@@ -42,10 +42,10 @@ const Welcome = () => {
                     <form action="" onSubmit={createUserSettings}>
                         <h2 className='Welcome-Inputs-Title'>Welcome</h2>
                         <h2 className='Welcome-Inputs-Title colored'>Name!</h2>
-                        <input type="text" name="username" id="username" placeholder="Type your username" onChange={handleChange} />
+                        <input type="text" name="username" id="username" placeholder="Type your username" onChange={handleChange} required/>
                         <p className='Welcome-Inputs-p'>Select your favorite color</p>
                         <label htmlFor="color"></label>
-                        <div className="Welcome-Inputs-Color">
+                        <div className="Welcome-Inputs-Color" required>
                             <input type="radio" className="radio_input" name="bgColor" id="color1" value='#F50D5A' onChange={handleChange} />
                             <label htmlFor="color1" className="radio_label">
                                 <ColorInput color={'#f50d5a'}/>

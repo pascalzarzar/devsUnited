@@ -1,6 +1,7 @@
 .Login {
     width: 100vw;
     background-color: #2E132C;
+    height: 100vh;
 }
 
 .Login-Container {
@@ -8,7 +9,6 @@
     flex-direction:column;
     margin: auto;
     overflow:auto;
-    
 }
 
 .Login-Logo {
